@@ -71,20 +71,6 @@
   return newImage;
 }
 
-- (void)viewWillLayoutSubviews {
-  int height = 75;
-
-  CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-  if (screenSize.height == 812) {
-    height = 85;
-  }
-
-  CGRect tabFrame = self.tabBar.frame; //self.TabBar is IBOutlet of your TabBar
-  tabFrame.size.height = height;
-  tabFrame.origin.y = self.view.frame.size.height - height;
-  self.tabBar.frame = tabFrame;
-}
-
 - (instancetype)initWithProps:(NSDictionary *)props children:(NSArray *)children globalProps:(NSDictionary*)globalProps bridge:(RCTBridge *)bridge
 {
   self = [super init];
@@ -92,7 +78,15 @@
 
   self.delegate = self;
 
-  self.tabBar.translucent = YES; // default
+  self.tabBar.translucent = YES;
+
+  UITabBar.appearance.shadowImage = [[UIImage alloc] init];
+  UITabBar.appearance.backgroundImage = [[UIImage alloc] init];
+
+  // Custom Border Color
+  UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 1)];
+  lineView.backgroundColor = [UIColor colorWithRed:184/255 green:169/255 blue:109/255 alpha:1.0];
+  [self.tabBar addSubview:lineView];
 
   UIColor *buttonColor = nil;
   UIColor *selectedButtonColor = nil;
@@ -103,6 +97,7 @@
 
   if (tabsStyle)
   {
+
     NSString *tabBarButtonColor = tabsStyle[@"tabBarButtonColor"];
     if (tabBarButtonColor)
     {
@@ -251,6 +246,7 @@
 
     overlayView.frame = CGRectMake(left, top, width, height);
     overlayView.backgroundColor = UIColor.clearColor;
+    overlayView.passThroughTouches = false;
     [self.view addSubview:overlayView];
   }
 
