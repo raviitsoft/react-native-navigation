@@ -16,6 +16,7 @@
 
 @implementation RCCTabBarController
 
+@synthesize overlayView;
 
 -(UIInterfaceOrientationMask)supportedInterfaceOrientations {
   return [self supportedControllerOrientations];
@@ -229,7 +230,7 @@
 
   //render overlay
   if (overlayConfig) {
-    RCTRootView *overlayView = [[RCTRootView alloc] initWithBridge:bridge
+    self.overlayView = [[RCTRootView alloc] initWithBridge:bridge
                                                         moduleName:overlayConfig[@"screen"]
                                                  initialProperties:overlayConfig[@"passProps"]];
 
@@ -385,6 +386,7 @@
   {
     BOOL hidden = [actionParams[@"hidden"] boolValue];
     self.tabBarHidden = hidden;
+    self.overlayView.hidden = hidden:
 
     CGRect nextFrame = self.tabBar.frame;
     nextFrame.origin.y = UIScreen.mainScreen.bounds.size.height - (hidden ? 0 : self.tabBar.frame.size.height);
