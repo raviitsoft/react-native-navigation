@@ -16,8 +16,6 @@
 
 @implementation RCCTabBarController
 
-@synthesize overlayView;
-
 -(UIInterfaceOrientationMask)supportedInterfaceOrientations {
   return [self supportedControllerOrientations];
 }
@@ -245,10 +243,10 @@
     CGFloat width = widthInset != (id)[NSNull null] ? [RCTConvert CGFloat:widthInset] : 0;
     CGFloat top = topInset != (id)[NSNull null] ? [RCTConvert CGFloat:topInset] : 0;
 
-    overlayView.frame = CGRectMake(left, top, width, height);
-    overlayView.backgroundColor = UIColor.clearColor;
-    overlayView.passThroughTouches = false;
-    [self.view addSubview:overlayView];
+    _overlayView.frame = CGRectMake(left, top, width, height);
+    _overlayView.backgroundColor = UIColor.clearColor;
+    _overlayView.passThroughTouches = false;
+    [self.tabBar insertSubview:_overlayView aboveSubview:lineView];
   }
 
   // replace the tabs
@@ -386,7 +384,7 @@
   {
     BOOL hidden = [actionParams[@"hidden"] boolValue];
     self.tabBarHidden = hidden;
-    self.overlayView.hidden = hidden:
+    self.overlayView.hidden = hidden;
 
     CGRect nextFrame = self.tabBar.frame;
     nextFrame.origin.y = UIScreen.mainScreen.bounds.size.height - (hidden ? 0 : self.tabBar.frame.size.height);
