@@ -84,7 +84,7 @@
 
   // Custom Border Color
   UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 1)];
-  lineView.backgroundColor = [UIColor colorWithRed:184/255 green:169/255 blue:109/255 alpha:1.0];
+  lineView.backgroundColor = [UIColor colorWithRed:0.73 green:0.67 blue:0.39 alpha:1.0];
   [self.tabBar addSubview:lineView];
 
   UIColor *buttonColor = nil;
@@ -246,7 +246,7 @@
     _overlayView.frame = CGRectMake(left, top, width, height);
     _overlayView.backgroundColor = UIColor.clearColor;
     _overlayView.passThroughTouches = false;
-    [self.tabBar insertSubview:_overlayView aboveSubview:lineView];
+    [self.tabBar addSubview:_overlayView];
   }
 
   // replace the tabs
