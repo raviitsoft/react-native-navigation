@@ -26,6 +26,11 @@
     [[[RCCManager sharedInstance].getBridge uiManager] configureNextLayoutAnimation:nil withCallback:^(NSArray* arr){} errorCallback:^(NSArray* arr){}];
   });
 
+  // Make sure we don't use the 3rd button
+  if(viewController == [tabBarController.viewControllers objectAtIndex:2]) {
+    return false;
+  }
+
   if (tabBarController.selectedIndex != [tabBarController.viewControllers indexOfObject:viewController]) {
     NSDictionary *body = @{
                            @"selectedTabIndex": @([tabBarController.viewControllers indexOfObject:viewController]),
@@ -229,24 +234,22 @@
   //render overlay
   if (overlayConfig) {
     self.overlayView = [[RCTRootView alloc] initWithBridge:bridge
-                                                        moduleName:overlayConfig[@"screen"]
-                                                 initialProperties:overlayConfig[@"passProps"]];
+                                                moduleName:overlayConfig[@"screen"]
+                                         initialProperties:overlayConfig[@"passProps"]];
 
     id overlayPositions = overlayConfig[@"position"];
-    id leftInset = overlayPositions[@"left"];
-    id topInset = overlayPositions[@"top"];
     id heightInset = overlayPositions[@"height"];
     id widthInset = overlayPositions[@"width"];
 
-    CGFloat left = leftInset != (id)[NSNull null] ? [RCTConvert CGFloat:leftInset] : 0;
     CGFloat height = heightInset != (id)[NSNull null] ? [RCTConvert CGFloat:heightInset] : 0;
     CGFloat width = widthInset != (id)[NSNull null] ? [RCTConvert CGFloat:widthInset] : 0;
-    CGFloat top = topInset != (id)[NSNull null] ? [RCTConvert CGFloat:topInset] : 0;
+    CGFloat deviceWidth = UIScreen.mainScreen.bounds.size.width;
 
-    _overlayView.frame = CGRectMake(left, top, width, height);
+    _overlayView.frame = CGRectMake((deviceWidth / 2) - (width / 2), -20, width, height);
     _overlayView.backgroundColor = UIColor.clearColor;
-    _overlayView.passThroughTouches = false;
+    _overlayView.passThroughTouches = NO;
     [self.tabBar addSubview:_overlayView];
+    [self.tabBar bringSubviewToFront:_overlayView];
   }
 
   // replace the tabs
@@ -396,7 +399,7 @@
                         options: (hidden ? UIViewAnimationOptionCurveEaseIn : UIViewAnimationOptionCurveEaseOut)
                      animations:^()
      {
-         [self.tabBar setFrame:nextFrame];
+       [self.tabBar setFrame:nextFrame];
      }
                      completion:^(BOOL finished)
      {
@@ -456,3 +459,4 @@
 
 
 @end
+
