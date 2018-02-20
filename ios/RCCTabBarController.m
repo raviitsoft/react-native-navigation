@@ -99,6 +99,7 @@
   NSDictionary *tabsStyle = props[@"style"];
   NSDictionary *overlayConfig = props[@"overlay"];
 
+
   if (tabsStyle)
   {
 
@@ -231,6 +232,16 @@
     [viewControllers addObject:viewController];
   }
 
+  // replace the tabs
+  self.viewControllers = viewControllers;
+
+  NSNumber *initialTab = tabsStyle[@"initialTabIndex"];
+  if (initialTab)
+  {
+    NSInteger initialTabIndex = initialTab.integerValue;
+    [self setSelectedIndex:initialTabIndex];
+  }
+
   //render overlay
   if (overlayConfig) {
     self.overlayView = [[RCTRootView alloc] initWithBridge:bridge
@@ -247,19 +258,8 @@
 
     _overlayView.frame = CGRectMake((deviceWidth / 2) - (width / 2), -20, width, height);
     _overlayView.backgroundColor = UIColor.clearColor;
-    _overlayView.passThroughTouches = NO;
     [self.tabBar addSubview:_overlayView];
     [self.tabBar bringSubviewToFront:_overlayView];
-  }
-
-  // replace the tabs
-  self.viewControllers = viewControllers;
-
-  NSNumber *initialTab = tabsStyle[@"initialTabIndex"];
-  if (initialTab)
-  {
-    NSInteger initialTabIndex = initialTab.integerValue;
-    [self setSelectedIndex:initialTabIndex];
   }
 
   [self setRotation:props];
