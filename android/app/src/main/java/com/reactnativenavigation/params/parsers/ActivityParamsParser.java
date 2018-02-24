@@ -8,6 +8,8 @@ import com.reactnativenavigation.params.SideMenuParams;
 import com.reactnativenavigation.views.SideMenu;
 
 public class ActivityParamsParser extends Parser {
+    public static String PARAM_OVERLAY = "overlay";
+
     public static ActivityParams parse(Bundle params) {
         ActivityParams result = new ActivityParams();
 
@@ -30,6 +32,10 @@ public class ActivityParamsParser extends Parser {
             SideMenuParams[] sideMenus = SideMenuParamsParser.parse(params.getBundle("sideMenu"));
             result.leftSideMenuParams = sideMenus[SideMenu.Side.Left.ordinal()];
             result.rightSideMenuParams = sideMenus[SideMenu.Side.Right.ordinal()];
+        }
+
+        if (hasKey(params, PARAM_OVERLAY)) {
+            result.overlayParams =  OverlayParamsParser.parse(params.getBundle(PARAM_OVERLAY));
         }
 
         result.animateShow = params.getBoolean("animateShow", true);
